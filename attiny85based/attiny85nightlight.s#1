@@ -9255,15 +9255,15 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <part name="SUPPLY3" library="SparkFun-PowerSymbols" deviceset="VCC" device=""/>
 <part name="SUPPLY5" library="SparkFun-PowerSymbols" deviceset="VCC" device=""/>
 <part name="SUPPLY7" library="SparkFun-PowerSymbols" deviceset="VCC" device=""/>
-<part name="R1" library="resistor" deviceset="R-EU_" device="R0805"/>
-<part name="R2" library="resistor" deviceset="R-EU_" device="R0805"/>
+<part name="R1" library="resistor" deviceset="R-EU_" device="R0805" value="120"/>
+<part name="R2" library="resistor" deviceset="R-EU_" device="R0805" value="120"/>
 <part name="R3" library="resistor" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="R5" library="resistor" deviceset="R-EU_" device="R0805"/>
+<part name="R5" library="resistor" deviceset="R-EU_" device="R0805" value="1m5"/>
 <part name="R6" library="resistor" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="C1" library="rcl" deviceset="C-US" device="C0805" value="100uF"/>
 <part name="C4" library="rcl" deviceset="C-US" device="C0805" value="100uf"/>
-<part name="LED1" library="led" deviceset="LED" device="5MM"/>
-<part name="LED2" library="led" deviceset="LED" device="5MM"/>
+<part name="D2" library="led" deviceset="LED" device="5MM" value="Yellow"/>
+<part name="D1" library="led" deviceset="LED" device="5MM" value="Red"/>
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device="" value="2n7200"/>
 <part name="PH1" library="photo-elements" deviceset="A10" device="" technology="50_09" value=""/>
 <part name="PIR" library="pinhead" deviceset="PINHD-1X3" device=""/>
@@ -9282,31 +9282,31 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <instance part="ATTINY85" gate="G$1" x="129.54" y="73.66"/>
 <instance part="JP1" gate="G$1" x="180.34" y="78.74"/>
 <instance part="GND2" gate="1" x="63.5" y="45.72"/>
-<instance part="GND3" gate="1" x="182.88" y="96.52"/>
+<instance part="GND3" gate="1" x="127" y="99.06"/>
 <instance part="GND4" gate="1" x="30.48" y="45.72"/>
 <instance part="GND5" gate="1" x="106.68" y="58.42"/>
 <instance part="GND6" gate="1" x="88.9" y="45.72"/>
 <instance part="GND8" gate="1" x="170.18" y="48.26"/>
-<instance part="SUPPLY1" gate="G$1" x="182.88" y="106.68"/>
+<instance part="SUPPLY1" gate="G$1" x="127" y="109.22"/>
 <instance part="SUPPLY2" gate="G$1" x="88.9" y="73.66"/>
 <instance part="SUPPLY3" gate="G$1" x="30.48" y="93.98"/>
-<instance part="SUPPLY5" gate="G$1" x="170.18" y="91.44"/>
+<instance part="SUPPLY5" gate="G$1" x="170.18" y="99.06"/>
 <instance part="SUPPLY7" gate="G$1" x="48.26" y="93.98"/>
 <instance part="R1" gate="G$1" x="22.86" y="86.36" rot="R90"/>
 <instance part="R2" gate="G$1" x="38.1" y="86.36" rot="R90"/>
 <instance part="R3" gate="G$1" x="68.58" y="60.96" rot="R180"/>
 <instance part="R5" gate="G$1" x="88.9" y="55.88" rot="R90"/>
 <instance part="R6" gate="G$1" x="63.5" y="53.34" rot="R90"/>
-<instance part="C1" gate="G$1" x="182.88" y="104.14"/>
+<instance part="C1" gate="G$1" x="127" y="106.68"/>
 <instance part="C4" gate="G$1" x="48.26" y="81.28"/>
-<instance part="LED1" gate="G$1" x="38.1" y="76.2"/>
-<instance part="LED2" gate="G$1" x="22.86" y="76.2"/>
+<instance part="D2" gate="G$1" x="38.1" y="76.2"/>
+<instance part="D1" gate="G$1" x="22.86" y="76.2"/>
 <instance part="Q1" gate="G$1" x="30.48" y="60.96"/>
 <instance part="PH1" gate="G$1" x="88.9" y="68.58"/>
-<instance part="PIR" gate="A" x="66.04" y="81.28"/>
+<instance part="PIR" gate="A" x="66.04" y="83.82"/>
 <instance part="C2" gate="G$1" x="99.06" y="106.68"/>
-<instance part="R4" gate="G$1" x="165.1" y="83.82" rot="R90"/>
-<instance part="SUPPLY6" gate="G$1" x="165.1" y="91.44"/>
+<instance part="R4" gate="G$1" x="165.1" y="91.44" rot="R90"/>
+<instance part="SUPPLY6" gate="G$1" x="165.1" y="99.06"/>
 <instance part="GND1" gate="1" x="53.34" y="68.58"/>
 <instance part="GND7" gate="1" x="99.06" y="99.06"/>
 <instance part="SUPPLY4" gate="G$1" x="104.14" y="111.76"/>
@@ -9322,11 +9322,9 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 </segment>
 <segment>
 <pinref part="ATTINY85" gate="G$1" pin="PB0/PCINT0/AIN0/OC0A/MOSI"/>
-<wire x1="109.22" y1="83.82" x2="71.12" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="83.82" x2="71.12" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="PIR" gate="A" pin="2"/>
-<wire x1="71.12" y1="81.28" x2="63.5" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="83.82" x2="63.5" y2="83.82" width="0.1524" layer="91"/>
 <label x="101.6" y="83.82" size="1.27" layer="95" rot="R90" xref="yes"/>
+<pinref part="PIR" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -9355,15 +9353,15 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <wire x1="88.9" y1="50.8" x2="88.9" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="PIR" gate="A" pin="3"/>
-<wire x1="63.5" y1="78.74" x2="58.42" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="78.74" x2="58.42" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="81.28" x2="58.42" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="58.42" y1="71.12" x2="53.34" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="GND1" gate="1" pin="GND"/>
 <junction x="53.34" y="71.12"/>
 <pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="53.34" y1="71.12" x2="48.26" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="71.12" x2="48.26" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="PIR" gate="A" pin="3"/>
+<wire x1="63.5" y1="81.28" x2="58.42" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ATTINY85" gate="G$1" pin="GND"/>
@@ -9385,24 +9383,25 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <pinref part="JP1" gate="G$1" pin="2"/>
 <pinref part="SUPPLY5" gate="G$1" pin="VCC"/>
 <wire x1="175.26" y1="81.28" x2="170.18" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="170.18" y1="81.28" x2="170.18" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="81.28" x2="170.18" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="PH1" gate="G$1" pin="1"/>
 <pinref part="SUPPLY2" gate="G$1" pin="VCC"/>
 </segment>
 <segment>
-<pinref part="PIR" gate="A" pin="1"/>
-<wire x1="63.5" y1="83.82" x2="48.26" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="48.26" y1="83.82" x2="48.26" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="83.82" x2="48.26" y2="86.36" width="0.1524" layer="91"/>
 <pinref part="SUPPLY7" gate="G$1" pin="VCC"/>
 <pinref part="C4" gate="G$1" pin="1"/>
-<junction x="48.26" y="83.82"/>
+<pinref part="PIR" gate="A" pin="1"/>
+<wire x1="48.26" y1="86.36" x2="48.26" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="86.36" x2="48.26" y2="86.36" width="0.1524" layer="91"/>
+<junction x="48.26" y="86.36"/>
 </segment>
 <segment>
 <pinref part="R4" gate="G$1" pin="2"/>
 <pinref part="SUPPLY6" gate="G$1" pin="VCC"/>
-<wire x1="165.1" y1="88.9" x2="165.1" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="165.1" y1="96.52" x2="165.1" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -9427,14 +9426,14 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <net name="N$5" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
-<pinref part="LED2" gate="G$1" pin="A"/>
+<pinref part="D1" gate="G$1" pin="A"/>
 <wire x1="22.86" y1="81.28" x2="22.86" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="R2" gate="G$1" pin="1"/>
-<pinref part="LED1" gate="G$1" pin="A"/>
+<pinref part="D2" gate="G$1" pin="A"/>
 <wire x1="38.1" y1="81.28" x2="38.1" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -9467,17 +9466,16 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 </net>
 <net name="RST" class="0">
 <segment>
-<pinref part="JP1" gate="G$1" pin="5"/>
-<wire x1="175.26" y1="78.74" x2="165.1" y2="78.74" width="0.1524" layer="91"/>
-<label x="162.56" y="78.74" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="R4" gate="G$1" pin="1"/>
-<wire x1="165.1" y1="78.74" x2="162.56" y2="78.74" width="0.1524" layer="91"/>
-<junction x="165.1" y="78.74"/>
-</segment>
-<segment>
 <pinref part="ATTINY85" gate="G$1" pin="PB5/PCINT5/!RESET!/ADC0/DW"/>
 <wire x1="109.22" y1="71.12" x2="106.68" y2="71.12" width="0.1524" layer="91"/>
 <label x="106.68" y="71.12" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="G$1" pin="5"/>
+<wire x1="175.26" y1="78.74" x2="165.1" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="R4" gate="G$1" pin="1"/>
+<wire x1="165.1" y1="78.74" x2="165.1" y2="86.36" width="0.1524" layer="91"/>
+<label x="165.1" y="78.74" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -9506,8 +9504,8 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 </net>
 <net name="N$1" class="0">
 <segment>
-<pinref part="LED1" gate="G$1" pin="C"/>
-<pinref part="LED2" gate="G$1" pin="C"/>
+<pinref part="D2" gate="G$1" pin="C"/>
+<pinref part="D1" gate="G$1" pin="C"/>
 <wire x1="38.1" y1="71.12" x2="30.48" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="Q1" gate="G$1" pin="D"/>
 <wire x1="30.48" y1="71.12" x2="22.86" y2="71.12" width="0.1524" layer="91"/>

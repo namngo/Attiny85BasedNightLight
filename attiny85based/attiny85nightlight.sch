@@ -9187,6 +9187,21 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <rectangle x1="-0.381" y1="-2.921" x2="0.381" y2="-1.905" layer="21"/>
 <rectangle x1="2.159" y1="-2.921" x2="2.921" y2="-1.905" layer="21"/>
 </package>
+<package name="1X01">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="-0.635" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="-0.635" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="-1.27" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<pad name="1" x="0" y="0" drill="1.016" shape="octagon"/>
+<text x="-1.3462" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-1.27" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="PINHD3">
@@ -9199,6 +9214,15 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <pin name="1" x="-2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="2" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="3" x="-2.54" y="-2.54" visible="pad" length="short" direction="pas" function="dot"/>
+</symbol>
+<symbol name="PINHD1">
+<wire x1="-6.35" y1="-2.54" x2="1.27" y2="-2.54" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="1.27" y2="2.54" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="2.54" x2="-6.35" y2="2.54" width="0.4064" layer="94"/>
+<wire x1="-6.35" y1="2.54" x2="-6.35" y2="-2.54" width="0.4064" layer="94"/>
+<text x="-6.35" y="3.175" size="1.778" layer="95">&gt;NAME</text>
+<text x="-6.35" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="1" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -9223,6 +9247,22 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <connect gate="A" pin="1" pad="1"/>
 <connect gate="A" pin="2" pad="2"/>
 <connect gate="A" pin="3" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="PINHD-1X1" prefix="JP" uservalue="yes">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<gates>
+<gate name="G$1" symbol="PINHD1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="1X01">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -9273,6 +9313,8 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <part name="GND1" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
 <part name="GND7" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
 <part name="SUPPLY4" library="SparkFun-PowerSymbols" deviceset="VCC" device=""/>
+<part name="+" library="pinhead" deviceset="PINHD-1X1" device=""/>
+<part name="-" library="pinhead" deviceset="PINHD-1X1" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9282,12 +9324,12 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <instance part="ATTINY85" gate="G$1" x="129.54" y="73.66"/>
 <instance part="JP1" gate="G$1" x="180.34" y="78.74"/>
 <instance part="GND2" gate="1" x="63.5" y="45.72"/>
-<instance part="GND3" gate="1" x="127" y="99.06"/>
+<instance part="GND3" gate="1" x="127" y="93.98"/>
 <instance part="GND4" gate="1" x="30.48" y="45.72"/>
 <instance part="GND5" gate="1" x="106.68" y="58.42"/>
 <instance part="GND6" gate="1" x="88.9" y="45.72"/>
 <instance part="GND8" gate="1" x="170.18" y="48.26"/>
-<instance part="SUPPLY1" gate="G$1" x="127" y="109.22"/>
+<instance part="SUPPLY1" gate="G$1" x="127" y="116.84"/>
 <instance part="SUPPLY2" gate="G$1" x="88.9" y="73.66"/>
 <instance part="SUPPLY3" gate="G$1" x="30.48" y="93.98"/>
 <instance part="SUPPLY5" gate="G$1" x="170.18" y="99.06"/>
@@ -9310,6 +9352,8 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <instance part="GND1" gate="1" x="53.34" y="68.58"/>
 <instance part="GND7" gate="1" x="99.06" y="99.06"/>
 <instance part="SUPPLY4" gate="G$1" x="104.14" y="111.76"/>
+<instance part="+" gate="G$1" x="144.78" y="111.76"/>
+<instance part="-" gate="G$1" x="144.78" y="99.06"/>
 </instances>
 <busses>
 </busses>
@@ -9337,6 +9381,11 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <segment>
 <pinref part="C1" gate="G$1" pin="2"/>
 <pinref part="GND3" gate="1" pin="GND"/>
+<wire x1="127" y1="96.52" x2="127" y2="99.06" width="0.1524" layer="91"/>
+<pinref part="-" gate="G$1" pin="1"/>
+<wire x1="127" y1="99.06" x2="127" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="99.06" x2="127" y2="99.06" width="0.1524" layer="91"/>
+<junction x="127" y="99.06"/>
 </segment>
 <segment>
 <pinref part="Q1" gate="G$1" pin="S"/>
@@ -9378,6 +9427,11 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_Photocells
 <segment>
 <pinref part="C1" gate="G$1" pin="1"/>
 <pinref part="SUPPLY1" gate="G$1" pin="VCC"/>
+<wire x1="127" y1="116.84" x2="127" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="+" gate="G$1" pin="1"/>
+<wire x1="127" y1="111.76" x2="127" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="111.76" x2="127" y2="111.76" width="0.1524" layer="91"/>
+<junction x="127" y="111.76"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="2"/>
