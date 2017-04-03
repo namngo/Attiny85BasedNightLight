@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.025" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
@@ -153,8 +153,9 @@
 <text x="45.72" y="19.685" size="0.8128" layer="25">-</text>
 <text x="28.575" y="36.195" size="0.8128" layer="25">-</text>
 <text x="47.625" y="27.94" size="0.8128" layer="25">-</text>
-<text x="36.195" y="27.94" size="0.4064" layer="25">MISO</text>
-<text x="36.83" y="29.845" size="1.016" layer="25">1</text>
+<text x="43.815" y="35.56" size="0.4064" layer="25">MISO</text>
+<text x="45.085" y="36.195" size="0.4064" layer="25">1</text>
+<text x="36.195" y="29.21" size="0.4064" layer="25">1</text>
 </plain>
 <libraries>
 <library name="atmel">
@@ -2736,7 +2737,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="VALUE" x="34.671" y="23.876" size="1.27" layer="28" ratio="10" rot="MR90"/>
 </element>
 <element name="C1" library="rcl" package="C0805" value="100uF" x="45.085" y="24.13" smashed="yes" rot="R270">
-<attribute name="NAME" x="46.355" y="24.13" size="0.8128" layer="25" rot="R270"/>
+<attribute name="NAME" x="44.45" y="21.59" size="0.8128" layer="25" rot="R270"/>
 </element>
 <element name="C2" library="rcl" package="C0805" value="100uf" x="31.75" y="35.56" smashed="yes" rot="MR0">
 <attribute name="NAME" x="32.385" y="33.655" size="0.8128" layer="26" rot="MR0"/>
@@ -2745,11 +2746,11 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="40.005" y="26.035" size="0.8128" layer="25" rot="R270"/>
 </element>
 <element name="D1" library="led" package="LED5MM" value="Red" x="27.94" y="22.86" smashed="yes" rot="R180">
-<attribute name="NAME" x="28.575" y="25.5016" size="0.8128" layer="25" ratio="10" rot="R180"/>
-<attribute name="VALUE" x="28.5496" y="20.2184" size="0.8128" layer="27" ratio="10" rot="R180"/>
+<attribute name="NAME" x="28.575" y="24.8666" size="0.8128" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="28.5496" y="21.4884" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="D2" library="led" package="LED5MM" value="Yellow" x="27.94" y="30.48" smashed="yes" rot="R180">
-<attribute name="NAME" x="26.67" y="27.4066" size="0.8128" layer="25" ratio="10" rot="R180"/>
+<attribute name="NAME" x="28.575" y="29.3116" size="0.8128" layer="25" ratio="10" rot="R180"/>
 <attribute name="VALUE" x="29.1846" y="32.9184" size="0.8128" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="JP1" library="atmel-1" package="AVR-ISP-6" value="AVR-ISP-6" x="48.26" y="33.02" smashed="yes" rot="R270"/>
@@ -2785,7 +2786,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="VALUE" x="34.29" y="32.385" size="1.27" layer="27"/>
 </element>
 <element name="-" library="pinhead" package="1X01" value="" x="27.305" y="35.56" smashed="yes">
-<attribute name="NAME" x="25.9588" y="34.2138" size="0.8128" layer="25" ratio="10"/>
+<attribute name="NAME" x="25.3238" y="34.2138" size="0.8128" layer="25" ratio="10"/>
 <attribute name="VALUE" x="26.035" y="32.385" size="1.27" layer="27"/>
 </element>
 </elements>
@@ -2857,6 +2858,18 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="36.83" y1="22.621" x2="36.84" y2="22.631" width="0.3048" layer="16"/>
 <wire x1="35.56" y1="20.005" x2="46.675" y2="20.005" width="0.3048" layer="16"/>
 <wire x1="46.675" y1="20.005" x2="47.625" y2="20.955" width="0.3048" layer="16"/>
+<polygon width="0.3048" layer="16">
+<vertex x="24.765" y="37.465"/>
+<vertex x="51.435" y="37.465"/>
+<vertex x="51.435" y="19.05"/>
+<vertex x="24.765" y="19.05"/>
+</polygon>
+<polygon width="0.3048" layer="1">
+<vertex x="24.765" y="37.465"/>
+<vertex x="51.435" y="37.465"/>
+<vertex x="51.435" y="19.05"/>
+<vertex x="24.765" y="19.05"/>
+</polygon>
 </signal>
 <signal name="VCC">
 <contactref element="C1" pad="1"/>
