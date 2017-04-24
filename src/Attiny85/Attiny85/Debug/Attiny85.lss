@@ -1,0 +1,157 @@
+
+Attiny85.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000008c  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000000e0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000000e0  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000110  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000030  00000000  00000000  0000014c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000005b8  00000000  00000000  0000017c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000050a  00000000  00000000  00000734  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000028d  00000000  00000000  00000c3e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000054  00000000  00000000  00000ecc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000030b  00000000  00000000  00000f20  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000d7  00000000  00000000  0000122b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000020  00000000  00000000  00001302  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0e c0       	rjmp	.+28     	; 0x1e <__ctors_end>
+   2:	15 c0       	rjmp	.+42     	; 0x2e <__bad_interrupt>
+   4:	14 c0       	rjmp	.+40     	; 0x2e <__bad_interrupt>
+   6:	13 c0       	rjmp	.+38     	; 0x2e <__bad_interrupt>
+   8:	12 c0       	rjmp	.+36     	; 0x2e <__bad_interrupt>
+   a:	11 c0       	rjmp	.+34     	; 0x2e <__bad_interrupt>
+   c:	10 c0       	rjmp	.+32     	; 0x2e <__bad_interrupt>
+   e:	0f c0       	rjmp	.+30     	; 0x2e <__bad_interrupt>
+  10:	0e c0       	rjmp	.+28     	; 0x2e <__bad_interrupt>
+  12:	0d c0       	rjmp	.+26     	; 0x2e <__bad_interrupt>
+  14:	0c c0       	rjmp	.+24     	; 0x2e <__bad_interrupt>
+  16:	0b c0       	rjmp	.+22     	; 0x2e <__bad_interrupt>
+  18:	0a c0       	rjmp	.+20     	; 0x2e <__bad_interrupt>
+  1a:	09 c0       	rjmp	.+18     	; 0x2e <__bad_interrupt>
+  1c:	08 c0       	rjmp	.+16     	; 0x2e <__bad_interrupt>
+
+0000001e <__ctors_end>:
+  1e:	11 24       	eor	r1, r1
+  20:	1f be       	out	0x3f, r1	; 63
+  22:	cf e5       	ldi	r28, 0x5F	; 95
+  24:	d2 e0       	ldi	r29, 0x02	; 2
+  26:	de bf       	out	0x3e, r29	; 62
+  28:	cd bf       	out	0x3d, r28	; 61
+  2a:	07 d0       	rcall	.+14     	; 0x3a <main>
+  2c:	2d c0       	rjmp	.+90     	; 0x88 <_exit>
+
+0000002e <__bad_interrupt>:
+  2e:	e8 cf       	rjmp	.-48     	; 0x0 <__vectors>
+
+00000030 <initADC>:
+    // till then, run loop continuously
+    while(ADCSRA & (1<<ADSC));
+    
+    return (ADC);
+    
+}
+  30:	88 e0       	ldi	r24, 0x08	; 8
+  32:	87 b9       	out	0x07, r24	; 7
+  34:	87 e0       	ldi	r24, 0x07	; 7
+  36:	86 b9       	out	0x06, r24	; 6
+  38:	08 95       	ret
+
+0000003a <main>:
+
+#define LED_PORT PB1
+
+int main(void)
+{
+  3a:	cf 93       	push	r28
+  3c:	df 93       	push	r29
+  3e:	00 d0       	rcall	.+0      	; 0x40 <__SREG__+0x1>
+  40:	1f 92       	push	r1
+  42:	cd b7       	in	r28, 0x3d	; 61
+  44:	de b7       	in	r29, 0x3e	; 62
+    DDRB |= (1 << LED_PORT);
+  46:	b9 9a       	sbi	0x17, 1	; 23
+    
+    initADC();
+  48:	f3 df       	rcall	.-26     	; 0x30 <initADC>
+    volatile  uint16_t raw_adc;
+
+    while(1)
+    {
+
+        ADCSRA |= (1 << ADSC);         // start ADC measurement
+  4a:	36 9a       	sbi	0x06, 6	; 6
+        while (ADCSRA & (1 << ADSC) ); // wait till conversion complete
+  4c:	36 99       	sbic	0x06, 6	; 6
+  4e:	fe cf       	rjmp	.-4      	; 0x4c <__SREG__+0xd>
+
+        // for 10-bit resolution:
+        adc_lobyte = ADCL; // get the sample value from ADCL
+  50:	84 b1       	in	r24, 0x04	; 4
+  52:	89 83       	std	Y+1, r24	; 0x01
+        raw_adc = ADCH<<8 | adc_lobyte;   // add lobyte and hibyte
+  54:	25 b1       	in	r18, 0x05	; 5
+  56:	89 81       	ldd	r24, Y+1	; 0x01
+  58:	08 2e       	mov	r0, r24
+  5a:	00 0c       	add	r0, r0
+  5c:	99 0b       	sbc	r25, r25
+  5e:	92 2b       	or	r25, r18
+  60:	9b 83       	std	Y+3, r25	; 0x03
+  62:	8a 83       	std	Y+2, r24	; 0x02
+
+        if (raw_adc > 512)
+  64:	8a 81       	ldd	r24, Y+2	; 0x02
+  66:	9b 81       	ldd	r25, Y+3	; 0x03
+  68:	81 30       	cpi	r24, 0x01	; 1
+  6a:	92 40       	sbci	r25, 0x02	; 2
+  6c:	58 f0       	brcs	.+22     	; 0x84 <__SREG__+0x45>
+        {
+            // ADC input voltage is more than half of the internal 1.1V reference voltage
+            PORTB |= (1 << LED_PORT);
+  6e:	c1 9a       	sbi	0x18, 1	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  70:	8f e7       	ldi	r24, 0x7F	; 127
+  72:	99 ea       	ldi	r25, 0xA9	; 169
+  74:	23 e0       	ldi	r18, 0x03	; 3
+  76:	81 50       	subi	r24, 0x01	; 1
+  78:	90 40       	sbci	r25, 0x00	; 0
+  7a:	20 40       	sbci	r18, 0x00	; 0
+  7c:	e1 f7       	brne	.-8      	; 0x76 <__SREG__+0x37>
+  7e:	00 c0       	rjmp	.+0      	; 0x80 <__SREG__+0x41>
+  80:	00 00       	nop
+  82:	e3 cf       	rjmp	.-58     	; 0x4a <__SREG__+0xb>
+            _delay_ms(1200);
+           
+        } 
+        else 
+        {
+             PORTB &= ~(1 << LED_PORT);
+  84:	c1 98       	cbi	0x18, 1	; 24
+  86:	e1 cf       	rjmp	.-62     	; 0x4a <__SREG__+0xb>
+
+00000088 <_exit>:
+  88:	f8 94       	cli
+
+0000008a <__stop_program>:
+  8a:	ff cf       	rjmp	.-2      	; 0x8a <__stop_program>
