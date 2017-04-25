@@ -7,6 +7,30 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/sleep.h>    // Sleep Modes
+#include <avr/power.h>    // Power management
+#include <avr/wdt.h>      // Watchdog timer
+
+#define _BV(BIT)   (1<<BIT)
+
+//****************************************************************
+// 0=16ms, 1=32ms,2=64ms,3=128ms,4=250ms,5=500ms
+// 6=1 sec,7=2 sec, 8=4 sec, 9= 8sec
+void setup_watchdog(int ii) {
+    //byte bb;
+    //int ww;
+    //if (ii > 9 ) ii=9;
+    //bb=ii & 7;
+    //if (ii > 7) bb|= (1<<5);
+    //bb|= (1<<WDCE);
+    //ww=bb;
+    //MCUSR &= ~(1<<WDRF);
+    //// start timed sequence
+    //watchdogRegister |= (1<<WDCE) | (1<<WDE);
+    //// set new watchdog timeout value
+    //watchdogRegister = bb;
+    //watchdogRegister |= _BV(WDIE);
+}
 
 void initADC()
 {
@@ -38,24 +62,26 @@ void initADC()
   // set ADLAR to 1 to enable the Left-shift result (only bits ADC9..ADC2 are available)
   // then, only reading ADCH is sufficient for 8-bit results (256 values)
 
-  ADMUX =
-            (0 << ADLAR) |     // do not left shift result (for 10-bit values)
-            (0 << REFS1) |     // Sets ref. voltage to internal 1.1V, bit 1
-            (0 << REFS0) |     // Sets ref. voltage to internal 1.1V, bit 0
-            (1 << MUX3)  |     // use ADC3 for input (PB3), MUX bit 3
-            (0 << MUX2)  |     // use ADC3 for input (PB3), MUX bit 2
-            (0 << MUX1)  |     // use ADC3 for input (PB3), MUX bit 1
-            (0 << MUX0);       // use ADC3 for input (PB3), MUX bit 0
-
   ADCSRA = 
             (1 << ADPS2) |     // set prescaler to 128, bit 2
             (1 << ADPS1) |     // set prescaler to 128, bit 1
             (1 << ADPS0);      // set prescaler to 128, bit 0
 }
 
+void initWatchDog()
+{
+    if(MCUSR & _BV(WDRF)) // If a reset was caused by the Watchdog Timer...
+    {
+        MCUSR &= ~_BV(WDRF);                 // Clear the WDT reset flag
+        WDTCR |= (1<<WDCE) | (0<<WDE);   // Enable the WD Change Bit
+        WDTCR = 0x00;                      // Disable the WDT
+    }    
+}
+
 uint16_t read_analog(int ch)
 {
-    ADCSRA |= (1 << ADEN);
+    ADCSRA |= (1 << ADEN); // turn on adc
+    
     ch &= 0b00000111;  // AND operation with 7
     ADMUX = (ADMUX & 0xF8)|ch; // clears the bottom 3 bits before ORing
     
@@ -68,42 +94,37 @@ uint16_t read_analog(int ch)
     // till then, run loop continuously
     while(ADCSRA & (1<<ADSC));
     
-    return (ADC);
+    uint16_t adc = ADC;
+    
+    // turn off adc
+    ADCSRA &= ~(1 << ADEN); // turn on adc
+    
+    return (adc);
     
 }
 
 #define LED_PORT PB1
+#define LDR_PORT PB3
 
 int main(void)
 {
     DDRB |= (1 << LED_PORT);
     
     initADC();
-    
-    volatile  int8_t adc_lobyte; // to hold the low byte of the ADC register (ADCL)
-    volatile  uint16_t raw_adc;
 
     while(1)
     {
-
-        ADCSRA |= (1 << ADSC);         // start ADC measurement
-        while (ADCSRA & (1 << ADSC) ); // wait till conversion complete
-
-        // for 10-bit resolution:
-        adc_lobyte = ADCL; // get the sample value from ADCL
-        raw_adc = ADCH<<8 | adc_lobyte;   // add lobyte and hibyte
+        uint16_t raw_adc = read_analog(LDR_PORT);   // add lobyte and hibyte
 
         if (raw_adc > 512)
         {
             // ADC input voltage is more than half of the internal 1.1V reference voltage
             PORTB |= (1 << LED_PORT);
-            _delay_ms(1200);
-           
+            PORTB &= ~(1 << LED_PORT);
         } 
         else 
         {
              PORTB &= ~(1 << LED_PORT);
-            // ADC input voltage is less than half of the internal 1.1V reference voltage
 
         }
 
