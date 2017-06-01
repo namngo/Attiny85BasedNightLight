@@ -3,31 +3,31 @@ Attiny85.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000130  00000000  00000000  00000074  2**1
+  0 .text         00000184  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000001a4  2**0
+  1 .data         00000000  00800060  00800060  000001f8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000002  00800060  00800060  000001a4  2**0
+  2 .bss          00000004  00800060  00800060  000001f8  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001a4  2**0
+  3 .comment      00000030  00000000  00000000  000001f8  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d4  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000228  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000050  00000000  00000000  00000210  2**0
+  5 .debug_aranges 00000068  00000000  00000000  00000264  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000066b  00000000  00000000  00000260  2**0
+  6 .debug_info   00000864  00000000  00000000  000002cc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000581  00000000  00000000  000008cb  2**0
+  7 .debug_abbrev 000006a6  00000000  00000000  00000b30  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000370  00000000  00000000  00000e4c  2**0
+  8 .debug_line   00000474  00000000  00000000  000011d6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000094  00000000  00000000  000011bc  2**2
+  9 .debug_frame  000000d4  00000000  00000000  0000164c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000033c  00000000  00000000  00001250  2**0
+ 10 .debug_str    00000439  00000000  00000000  00001720  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000009b  00000000  00000000  0000158c  2**0
+ 11 .debug_loc    00000187  00000000  00000000  00001b59  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000040  00000000  00000000  00001627  2**0
+ 12 .debug_ranges 00000058  00000000  00000000  00001ce0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -45,9 +45,9 @@ Disassembly of section .text:
   12:	15 c0       	rjmp	.+42     	; 0x3e <__bad_interrupt>
   14:	14 c0       	rjmp	.+40     	; 0x3e <__bad_interrupt>
   16:	13 c0       	rjmp	.+38     	; 0x3e <__bad_interrupt>
-  18:	75 c0       	rjmp	.+234    	; 0x104 <__vector_12>
+  18:	7c c0       	rjmp	.+248    	; 0x112 <__vector_12>
   1a:	11 c0       	rjmp	.+34     	; 0x3e <__bad_interrupt>
-  1c:	10 c0       	rjmp	.+32     	; 0x3e <__bad_interrupt>
+  1c:	8e c0       	rjmp	.+284    	; 0x13a <__vector_14>
 
 0000001e <__ctors_end>:
   1e:	11 24       	eor	r1, r1
@@ -67,267 +67,237 @@ Disassembly of section .text:
   32:	1d 92       	st	X+, r1
 
 00000034 <.do_clear_bss_start>:
-  34:	a2 36       	cpi	r26, 0x62	; 98
+  34:	a4 36       	cpi	r26, 0x64	; 100
   36:	b2 07       	cpc	r27, r18
   38:	e1 f7       	brne	.-8      	; 0x32 <.do_clear_bss_loop>
-  3a:	60 d0       	rcall	.+192    	; 0xfc <main>
-  3c:	77 c0       	rjmp	.+238    	; 0x12c <_exit>
+  3a:	67 d0       	rcall	.+206    	; 0x10a <main>
+  3c:	a1 c0       	rjmp	.+322    	; 0x180 <_exit>
 
 0000003e <__bad_interrupt>:
   3e:	e0 cf       	rjmp	.-64     	; 0x0 <__vectors>
 
 00000040 <read_analog>:
-#include <avr/wdt.h>      // Watchdog timer
-#include <avr/interrupt.h>      // Watchdog timer
-
-uint16_t read_analog(int ch)
-{
-     ADCSRA =
+        usiserial_get_tx_data() >> 1;         // followed by first 7 bits of serial data
+    USICR  = (1<<USIOIE)|                     // Enable USI Counter OVF interrupt.
+        (0<<USIWM1)|(1<<USIWM0)|              // Select three wire mode to ensure USI written to PB1
+        (0<<USICS1)|(1<<USICS0)|(0<<USICLK);  // Select Timer0 Compare match as USI Clock source.
+    DDRB  |= (1<<PB1);                        // Configure USI_DO as output.
+    USISR = 1<<USIOIF |                       // Clear USI overflow interrupt flag
   40:	27 e0       	ldi	r18, 0x07	; 7
   42:	26 b9       	out	0x06, r18	; 6
-     (1 << ADPS2) |     // set prescaler to 128, bit 2
-     (1 << ADPS1) |     // set prescaler to 128, bit 1
-     (1 << ADPS0);      // set prescaler to 128, bit 0
-     
-    ADCSRA |= (1 << ADEN); // turn on adc
   44:	37 9a       	sbi	0x06, 7	; 6
-    
-    ch &= 0b00000111;  // AND operation with 7
-    ADMUX = (ADMUX & 0xF8)|ch; // clears the bottom 3 bits before ORing
   46:	27 b1       	in	r18, 0x07	; 7
   48:	28 7f       	andi	r18, 0xF8	; 248
   4a:	87 70       	andi	r24, 0x07	; 7
   4c:	99 27       	eor	r25, r25
   4e:	82 2b       	or	r24, r18
   50:	87 b9       	out	0x07, r24	; 7
-    
-    // start single convertion
-    // write ’1? to ADSC
-    ADCSRA |= (1<<ADSC);
   52:	36 9a       	sbi	0x06, 6	; 6
-    
-    // wait for conversion to complete
-    // ADSC becomes ’0? again
-    // till then, run loop continuously
-    while (ADCSRA & (1<<ADSC));
   54:	36 99       	sbic	0x06, 6	; 6
   56:	fe cf       	rjmp	.-4      	; 0x54 <read_analog+0x14>
-    
-    uint16_t adc = ADC;
   58:	84 b1       	in	r24, 0x04	; 4
   5a:	95 b1       	in	r25, 0x05	; 5
-    
-    // turn off adc
-    ADCSRA &= ~(1 << ADEN); // turn off adc
   5c:	37 98       	cbi	0x06, 7	; 6
-    
-    return (adc);
-    
-}
   5e:	08 95       	ret
 
 00000060 <check_light>:
-// > 0 the number of second the led has been on
-volatile int led_state = 0; 
-
-void check_light()
-{
-    cli();
   60:	f8 94       	cli
-    if (led_state == 0)
-  62:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  66:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+  62:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <led_state>
+  66:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <led_state+0x1>
   6a:	89 2b       	or	r24, r25
   6c:	81 f4       	brne	.+32     	; 0x8e <check_light+0x2e>
-    {
-        uint16_t light_value = read_analog(LDR_PORT);
   6e:	83 e0       	ldi	r24, 0x03	; 3
   70:	90 e0       	ldi	r25, 0x00	; 0
   72:	e6 df       	rcall	.-52     	; 0x40 <read_analog>
-        if (light_value < LightDarkEnought)
   74:	8a 38       	cpi	r24, 0x8A	; 138
   76:	92 40       	sbci	r25, 0x02	; 2
-  78:	f8 f4       	brcc	.+62     	; 0xb8 <check_light+0x58>
-        {
-            int has_movement = PINB & (1 << PIR_PORT);
-            if (has_movement)
+  78:	30 f5       	brcc	.+76     	; 0xc6 <check_light+0x66>
   7a:	b0 9b       	sbis	0x16, 0	; 22
-  7c:	1d c0       	rjmp	.+58     	; 0xb8 <check_light+0x58>
-            {
-                led_state = 1;
+  7c:	24 c0       	rjmp	.+72     	; 0xc6 <check_light+0x66>
   7e:	81 e0       	ldi	r24, 0x01	; 1
   80:	90 e0       	ldi	r25, 0x00	; 0
-  82:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
-  86:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
-                // turn on the led
-                PORTB |= (1 << LED_PORT);
+  82:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <led_state+0x1>
+  86:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <led_state>
   8a:	c1 9a       	sbi	0x18, 1	; 24
-  8c:	15 c0       	rjmp	.+42     	; 0xb8 <check_light+0x58>
-            }
-        }
+  8c:	1c c0       	rjmp	.+56     	; 0xc6 <check_light+0x66>
+  8e:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <led_state>
+  92:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <led_state+0x1>
+  96:	01 96       	adiw	r24, 0x01	; 1
+  98:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <led_state+0x1>
+  9c:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <led_state>
+  a0:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <led_state>
+  a4:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <led_state+0x1>
+  a8:	89 37       	cpi	r24, 0x79	; 121
+  aa:	91 05       	cpc	r25, r1
+  ac:	0c f0       	brlt	.+2      	; 0xb0 <check_light+0x50>
+  ae:	c1 98       	cbi	0x18, 1	; 24
+  b0:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <led_state>
+  b4:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <led_state+0x1>
+  b8:	87 39       	cpi	r24, 0x97	; 151
+  ba:	91 05       	cpc	r25, r1
+  bc:	24 f0       	brlt	.+8      	; 0xc6 <check_light+0x66>
+  be:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <led_state+0x1>
+  c2:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <led_state>
+  c6:	78 94       	sei
+  c8:	08 95       	ret
+
+000000ca <resetWatchdog>:
+  ca:	14 be       	out	0x34, r1	; 52
+  cc:	88 e9       	ldi	r24, 0x98	; 152
+  ce:	81 bd       	out	0x21, r24	; 33
+  d0:	84 e6       	ldi	r24, 0x64	; 100
+  d2:	81 bd       	out	0x21, r24	; 33
+  d4:	a8 95       	wdr
+  d6:	08 95       	ret
+
+000000d8 <setup>:
+  d8:	f8 94       	cli
+  da:	f7 df       	rcall	.-18     	; 0xca <resetWatchdog>
+  dc:	b9 9a       	sbi	0x17, 1	; 23
+  de:	78 94       	sei
+  e0:	08 95       	ret
+
+000000e2 <go_to_sleep>:
+  e2:	85 b7       	in	r24, 0x35	; 53
+  e4:	87 7e       	andi	r24, 0xE7	; 231
+  e6:	80 61       	ori	r24, 0x10	; 16
+  e8:	85 bf       	out	0x35, r24	; 53
+  ea:	80 b5       	in	r24, 0x20	; 32
+  ec:	8f 60       	ori	r24, 0x0F	; 15
+  ee:	80 bd       	out	0x20, r24	; 32
+  f0:	ec df       	rcall	.-40     	; 0xca <resetWatchdog>
+  f2:	85 b7       	in	r24, 0x35	; 53
+  f4:	80 62       	ori	r24, 0x20	; 32
+  f6:	85 bf       	out	0x35, r24	; 53
+  f8:	78 94       	sei
+  fa:	88 95       	sleep
+  fc:	85 b7       	in	r24, 0x35	; 53
+  fe:	8f 7d       	andi	r24, 0xDF	; 223
+ 100:	85 bf       	out	0x35, r24	; 53
+ 102:	80 b5       	in	r24, 0x20	; 32
+ 104:	80 7f       	andi	r24, 0xF0	; 240
+ 106:	80 bd       	out	0x20, r24	; 32
+ 108:	08 95       	ret
+
+0000010a <main>:
+ 10a:	e6 df       	rcall	.-52     	; 0xd8 <setup>
+ 10c:	a9 df       	rcall	.-174    	; 0x60 <check_light>
+ 10e:	e9 df       	rcall	.-46     	; 0xe2 <go_to_sleep>
+ 110:	fd cf       	rjmp	.-6      	; 0x10c <main+0x2>
+
+00000112 <__vector_12>:
+ 112:	1f 92       	push	r1
+ 114:	0f 92       	push	r0
+ 116:	0f b6       	in	r0, 0x3f	; 63
+ 118:	0f 92       	push	r0
+ 11a:	11 24       	eor	r1, r1
+ 11c:	8f 93       	push	r24
+ 11e:	0f b6       	in	r0, 0x3f	; 63
+ 120:	f8 94       	cli
+ 122:	a8 95       	wdr
+ 124:	81 b5       	in	r24, 0x21	; 33
+ 126:	88 61       	ori	r24, 0x18	; 24
+ 128:	81 bd       	out	0x21, r24	; 33
+ 12a:	11 bc       	out	0x21, r1	; 33
+ 12c:	0f be       	out	0x3f, r0	; 63
+ 12e:	8f 91       	pop	r24
+ 130:	0f 90       	pop	r0
+ 132:	0f be       	out	0x3f, r0	; 63
+ 134:	0f 90       	pop	r0
+ 136:	1f 90       	pop	r1
+ 138:	18 95       	reti
+
+0000013a <__vector_14>:
+        (16 - 8);                             // and set USI counter to count 8 bits
+}
+
+// USI overflow interrupt indicates we have sent a buffer
+ISR (USI_OVF_vect) {
+ 13a:	1f 92       	push	r1
+ 13c:	0f 92       	push	r0
+ 13e:	0f b6       	in	r0, 0x3f	; 63
+ 140:	0f 92       	push	r0
+ 142:	11 24       	eor	r1, r1
+ 144:	8f 93       	push	r24
+// USISerial send state variable and accessors
+enum USISERIAL_SEND_STATE { AVAILABLE, FIRST, SECOND };
+static volatile enum USISERIAL_SEND_STATE usiserial_send_state = AVAILABLE;
+static inline enum USISERIAL_SEND_STATE usiserial_send_get_state(void)
+{
+    return usiserial_send_state;
+ 146:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <usiserial_send_state>
+        (16 - 8);                             // and set USI counter to count 8 bits
+}
+
+// USI overflow interrupt indicates we have sent a buffer
+ISR (USI_OVF_vect) {
+    if (usiserial_send_get_state() == FIRST)
+ 14a:	81 30       	cpi	r24, 0x01	; 1
+ 14c:	69 f4       	brne	.+26     	; 0x168 <__vector_14+0x2e>
+{
+    return usiserial_send_state;
+}
+static inline void usiserial_send_set_state(enum USISERIAL_SEND_STATE state)
+{
+    usiserial_send_state=state;
+ 14e:	82 e0       	ldi	r24, 0x02	; 2
+ 150:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <usiserial_send_state>
+
+// Transmit data persistent between USI OVF interrupts
+static volatile uint8_t usiserial_tx_data;
+static inline uint8_t usiserial_get_tx_data(void)
+{
+    return usiserial_tx_data;
+ 154:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+// USI overflow interrupt indicates we have sent a buffer
+ISR (USI_OVF_vect) {
+    if (usiserial_send_get_state() == FIRST)
+    {
+        usiserial_send_set_state(SECOND);
+        USIDR = usiserial_get_tx_data() << 7  // Send last 1 bit of data
+ 158:	87 95       	ror	r24
+ 15a:	88 27       	eor	r24, r24
+ 15c:	87 95       	ror	r24
+ 15e:	8f 67       	ori	r24, 0x7F	; 127
+ 160:	8f b9       	out	0x0f, r24	; 15
+            | 0x7F;                           // and stop bits (high)
+        USISR = 1<<USIOIF |                   // Clear USI overflow interrupt flag
+ 162:	8e e4       	ldi	r24, 0x4E	; 78
+ 164:	8e b9       	out	0x0e, r24	; 14
+ 166:	06 c0       	rjmp	.+12     	; 0x174 <__vector_14+0x3a>
+            (16 - (1 + (STOPBITS)));          // Set USI counter to send last data bit and stop bits
     }
     else
     {
-        led_state ++;
-  8e:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  92:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
-  96:	01 96       	adiw	r24, 0x01	; 1
-  98:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
-  9c:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
-        if (led_state > Light_Time_In_Second)
-  a0:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  a4:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
-  a8:	89 37       	cpi	r24, 0x79	; 121
-  aa:	91 05       	cpc	r25, r1
-  ac:	2c f0       	brlt	.+10     	; 0xb8 <check_light+0x58>
-        {
-            led_state = 0;
-  ae:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
-  b2:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
-            // turn off the led
-            PORTB &= ~(1 << LED_PORT);
-  b6:	c1 98       	cbi	0x18, 1	; 24
-        }
+        PORTB |= 1 << PB1;                    // Ensure output is high
+ 168:	c1 9a       	sbi	0x18, 1	; 24
+        DDRB  |= (1<<PB1);                    // Configure USI_DO as output.
+ 16a:	b9 9a       	sbi	0x17, 1	; 23
+        USICR = 0;                            // Disable USI.
+ 16c:	1d b8       	out	0x0d, r1	; 13
+        USISR |= 1<<USIOIF;                   // clear interrupt flag
+ 16e:	76 9a       	sbi	0x0e, 6	; 14
+{
+    return usiserial_send_state;
+}
+static inline void usiserial_send_set_state(enum USISERIAL_SEND_STATE state)
+{
+    usiserial_send_state=state;
+ 170:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <usiserial_send_state>
+        TCNT0 = oldTCNT0;
+#endif
+
+        usiserial_send_set_state(AVAILABLE);
     }
-    
-    sei();
-  b8:	78 94       	sei
-  ba:	08 95       	ret
+ 174:	8f 91       	pop	r24
+ 176:	0f 90       	pop	r0
+ 178:	0f be       	out	0x3f, r0	; 63
+ 17a:	0f 90       	pop	r0
+ 17c:	1f 90       	pop	r1
+ 17e:	18 95       	reti
 
-000000bc <resetWatchdog>:
-}
+00000180 <_exit>:
+ 180:	f8 94       	cli
 
-void resetWatchdog ()
-{
-    // clear various "reset" flags
-    MCUSR = 0;
-  bc:	14 be       	out	0x34, r1	; 52
-    // allow changes, disable reset, clear existing interrupt
-    WDTCR = (1 << WDCE) | (1 << WDE) | (1 << WDIF);
-  be:	88 e9       	ldi	r24, 0x98	; 152
-  c0:	81 bd       	out	0x21, r24	; 33
-    // set interrupt mode and an interval (WDE must be changed from 1 to 0 here)
-    WDTCR = (1 << WDIE) | (1 << WDP3) | (1 << WDP0);    // set WDIE, and 8 seconds delay
-  c2:	81 e6       	ldi	r24, 0x61	; 97
-  c4:	81 bd       	out	0x21, r24	; 33
-    // pat the dog
-    wdt_reset();
-  c6:	a8 95       	wdr
-  c8:	08 95       	ret
-
-000000ca <setup>:
-}  // end of resetWatchdog
-
-void setup()
-{
-    cli();
-  ca:	f8 94       	cli
-    resetWatchdog();
-  cc:	f7 df       	rcall	.-18     	; 0xbc <resetWatchdog>
-    DDRB |= (1 << LED_PORT);
-  ce:	b9 9a       	sbi	0x17, 1	; 23
-    sei();
-  d0:	78 94       	sei
-  d2:	08 95       	ret
-
-000000d4 <go_to_sleep>:
-}
-
-void go_to_sleep()
-{
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  d4:	85 b7       	in	r24, 0x35	; 53
-  d6:	87 7e       	andi	r24, 0xE7	; 231
-  d8:	80 61       	ori	r24, 0x10	; 16
-  da:	85 bf       	out	0x35, r24	; 53
-static __inline void
-__attribute__ ((__always_inline__))
-__power_all_disable()
-{
-#ifdef __AVR_HAVE_PRR
-    PRR |= (uint8_t)(__AVR_HAVE_PRR);
-  dc:	80 b5       	in	r24, 0x20	; 32
-  de:	8f 60       	ori	r24, 0x0F	; 15
-  e0:	80 bd       	out	0x20, r24	; 32
-    power_all_disable();
-    resetWatchdog();
-  e2:	ec df       	rcall	.-40     	; 0xbc <resetWatchdog>
-    sleep_enable();
-  e4:	85 b7       	in	r24, 0x35	; 53
-  e6:	80 62       	ori	r24, 0x20	; 32
-  e8:	85 bf       	out	0x35, r24	; 53
-    sei(); 
-  ea:	78 94       	sei
-    sleep_cpu();
-  ec:	88 95       	sleep
-    sleep_disable();
-  ee:	85 b7       	in	r24, 0x35	; 53
-  f0:	8f 7d       	andi	r24, 0xDF	; 223
-  f2:	85 bf       	out	0x35, r24	; 53
-static __inline void
-__attribute__ ((__always_inline__))
-__power_all_enable()
-{
-#ifdef __AVR_HAVE_PRR
-    PRR &= (uint8_t)~(__AVR_HAVE_PRR);
-  f4:	80 b5       	in	r24, 0x20	; 32
-  f6:	80 7f       	andi	r24, 0xF0	; 240
-  f8:	80 bd       	out	0x20, r24	; 32
-  fa:	08 95       	ret
-
-000000fc <main>:
-    power_all_enable();
-}
-
-int main(void)
-{
-    setup();
-  fc:	e6 df       	rcall	.-52     	; 0xca <setup>
-
-    while(1)
-    {
-        check_light();
-  fe:	b0 df       	rcall	.-160    	; 0x60 <check_light>
-        go_to_sleep();
- 100:	e9 df       	rcall	.-46     	; 0xd4 <go_to_sleep>
- 102:	fd cf       	rjmp	.-6      	; 0xfe <main+0x2>
-
-00000104 <__vector_12>:
-    }
-}
-
-ISR( WDT_vect ) {
- 104:	1f 92       	push	r1
- 106:	0f 92       	push	r0
- 108:	0f b6       	in	r0, 0x3f	; 63
- 10a:	0f 92       	push	r0
- 10c:	11 24       	eor	r1, r1
- 10e:	8f 93       	push	r24
-void wdt_disable (void)
-{
-	if (_SFR_IO_REG_P (_WD_CONTROL_REG))
-	{
-        uint8_t register temp_reg;
-		__asm__ __volatile__ (
- 110:	0f b6       	in	r0, 0x3f	; 63
- 112:	f8 94       	cli
- 114:	a8 95       	wdr
- 116:	81 b5       	in	r24, 0x21	; 33
- 118:	88 61       	ori	r24, 0x18	; 24
- 11a:	81 bd       	out	0x21, r24	; 33
- 11c:	11 bc       	out	0x21, r1	; 33
- 11e:	0f be       	out	0x3f, r0	; 63
-    /* dummy */
-    wdt_disable();
- 120:	8f 91       	pop	r24
- 122:	0f 90       	pop	r0
- 124:	0f be       	out	0x3f, r0	; 63
- 126:	0f 90       	pop	r0
- 128:	1f 90       	pop	r1
- 12a:	18 95       	reti
-
-0000012c <_exit>:
- 12c:	f8 94       	cli
-
-0000012e <__stop_program>:
- 12e:	ff cf       	rjmp	.-2      	; 0x12e <__stop_program>
+00000182 <__stop_program>:
+ 182:	ff cf       	rjmp	.-2      	; 0x182 <__stop_program>

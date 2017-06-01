@@ -383,7 +383,7 @@ UsedLibrary="E:/eagle/libraries/atmel/atmel-1.lbr"
 [Win_1]
 Type="Control Panel"
 Loc="244 185 1613 864"
-State=2
+State=0
 Number=0
 
 [Desktop]

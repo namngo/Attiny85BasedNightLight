@@ -1,0 +1,18 @@
+/*
+ * Attiny85Sketch.cpp
+ *
+ * Created: 5/29/2017 10:52:34 PM
+ * Author : nam
+ */ 
+
+#include <avr/io.h>
+
+
+int main(void)
+{
+    /* Replace with your application code */
+    while (1) 
+    {
+    }
+}
+
