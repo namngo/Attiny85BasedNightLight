@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
     <ProjectGuid>{c81eaf1a-0a54-410b-b45e-6b0db2e92897}</ProjectGuid>
-    <avrdevice>ATmega2560</avrdevice>
+    <avrdevice>ATtiny85</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -19,7 +19,7 @@
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue>exception_table</OverrideVtorValue>
-    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
     <ProgFlashFromRam>true</ProgFlashFromRam>
     <RamSnippetAddress>0x20000000</RamSnippetAddress>
     <CacheFlash>true</CacheFlash>
@@ -43,19 +43,23 @@
     <avrtoolserialnumber>J41800073172</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E930B</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
-      <ToolOptions xmlns="">
+      <ToolOptions>
         <InterfaceProperties>
+          <IspClock>125000</IspClock>
         </InterfaceProperties>
+        <InterfaceName>debugWIRE</InterfaceName>
       </ToolOptions>
-      <ToolType xmlns="">com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber xmlns="">J41800073172</ToolNumber>
-      <ToolName xmlns="">Atmel-ICE</ToolName>
+      <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
+      <ToolNumber>J41800073172</ToolNumber>
+      <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
+    <avrtoolinterface>debugWIRE</avrtoolinterface>
+    <avrtoolinterfaceclock>125000</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrGccCpp>
-  <avrgcc.common.Device>-mmcu=atmega2560 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega2560"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=attiny85 -B "%24(PackRepoDir)\atmel\ATtiny_DFP\1.2.118\gcc\dev\attiny85"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -142,7 +146,6 @@
   <avrgcccpp.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.2.118\include</Value>
-      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.2.132\include</Value>
     </ListValues>
   </avrgcccpp.assembler.general.IncludePaths>
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
@@ -388,7 +391,7 @@ vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGccCpp>
-  <avrgcc.common.Device>-mmcu=atmega2560 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.2.132\gcc\dev\atmega2560"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=attiny85 -B "%24(PackRepoDir)\atmel\ATtiny_DFP\1.2.118\gcc\dev\attiny85"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -475,7 +478,6 @@ vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
   <avrgcccpp.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.2.118\include</Value>
-      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.2.132\include</Value>
     </ListValues>
   </avrgcccpp.assembler.general.IncludePaths>
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>

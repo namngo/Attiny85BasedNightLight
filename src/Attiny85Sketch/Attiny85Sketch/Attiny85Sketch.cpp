@@ -11,6 +11,9 @@
  * Author: nam
  */ 
 
+#define INTERNAL2V56_NO_CAP (6)
+
+
 #define LED_PORT PB1
 #define LDR_PORT PB3
 #define PIR_PORT PB0
@@ -34,7 +37,7 @@ volatile int led_state = 0;
 
 void setup()
 {
-
+    analogReference(DEFAULT);
       /* add setup code here, setup code runs once when the processor starts */
     pinMode(LED_PORT, OUTPUT);
     pinMode(LDR_PORT, INPUT);
@@ -56,7 +59,8 @@ void check_light()
         if (light_value < Light_Dark_Value)
         {
             int has_movement = digitalRead(PIR_PORT);
-            if (has_movement)
+            serial.println(has_movement);
+            if (has_movement == 1)
             {
                 serial.print("movement! ");
                 serial.println(light_value);
